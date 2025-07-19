@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import framingSummary from './FramingSummaryUpdate';
 
 const App = () => {
   const [url, setUrl] = useState('');
@@ -21,8 +20,9 @@ const App = () => {
   };
 
   const getBiasColor = (score) => {
-    if (score <= -0.5 || score >= 0.5) return 'text-red-500';
-    if (score <= -0.2 || score >= 0.2) return 'text-yellow-400';
+    const numeric = parseFloat(score);
+    if (numeric <= -0.5 || numeric >= 0.5) return 'text-red-500';
+    if (numeric <= -0.2 || numeric >= 0.2) return 'text-yellow-400';
     return 'text-green-400';
   };
 
@@ -32,7 +32,7 @@ const App = () => {
         EchoVeritasAI
       </h1>
 
-      <div className="flex flex-col md:flex-row items-center gap-4 mb-6 animate-fade-in">
+      <div className="flex flex-col md:flex-row items-center gap-4 mb-2 animate-fade-in">
         <input
           type="text"
           placeholder="Enter news article URL"
@@ -52,6 +52,15 @@ const App = () => {
         </button>
       </div>
 
+      {/* Bias Legend */}
+      <div className="text-center mb-6 animate-fade-in">
+        <p className="text-sm text-gray-400">
+          <span className="text-green-400">Center: -0.19 to +0.19</span> |{' '}
+          <span className="text-yellow-400">Lean: -0.49 to -0.2 or +0.2 to +0.49</span> |{' '}
+          <span className="text-red-500">Extreme: -1.0 to -0.5 or +0.5 to +1.0</span>
+        </p>
+      </div>
+
       {loading && (
         <div className="text-center animate-fade-in">
           <span className="text-yellow-400 font-medium">Fetching summary and bias...</span>
@@ -66,15 +75,19 @@ const App = () => {
         <div className="mt-8 space-y-6 animate-fade-in">
           <div className="bg-neutral-900 p-6 rounded-xl shadow-md border border-white">
             <h2 className="text-xl font-semibold mb-2">📄 Article Summary</h2>
-            <p>{result.output}</p>
-            <div className="mt-2 text-sm">
-              <span className={getBiasColor(result.sourceBias)}>Source Bias: {result.sourceBias}</span>{' '}
-              | <span className={getBiasColor(result.contentBias)}>Content Bias: {result.contentBias}</span>
+            {result.output.split('\n').map((line, index) => (
+              line.trim() && <p key={index} className="mb-2">{line}</p>
+            ))}
+            <div className="mt-4 text-sm">
+              <span className={getBiasColor(result.sourceBias)}>
+                Source Bias: {result.sourceBias}
+              </span>{' '}
+              |{' '}
+              <span className={getBiasColor(result.contentBias)}>
+                Content Bias: {result.contentBias}
+              </span>
             </div>
           </div>
-
-          {/* Framing summary */}
-          <div>{framingSummary}</div>
         </div>
       )}
 
@@ -82,7 +95,6 @@ const App = () => {
         Built by Jackson & Echo ⚡ | Transparency matters.
       </footer>
 
-      {/* Animations */}
       <style>
         {`
           .animate-fade-in {
@@ -94,6 +106,9 @@ const App = () => {
           }
         `}
       </style>
+      <div className="mt-4 text-xs text-gray-500 text-center max-w-2xl mx-auto px-4">
+  Disclaimer: EchoVeritasAI is an experimental tool that summarizes and analyzes news coverage using AI. While we strive for accuracy and transparency, this tool should not be used as a sole source for decision-making. Always verify with primary sources when possible.
+</div>
     </div>
   );
 };
