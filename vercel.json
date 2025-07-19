@@ -1,18 +1,8 @@
 {
-  "redirects": [
+  "rewrites": [
     {
       "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.echoveritasai.com"
-        }
-      ],
-      "destination": "https://echoveritasai.com/:1",
-      "statusCode": 308
+      "destination": "/"
     }
-  ],
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
   ]
 }
