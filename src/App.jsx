@@ -9,7 +9,7 @@ const App = () => {
   const handleVerify = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/verify', { url });
+      const response = await axios.post('https://echoveritasai-backend.onrender.com/api/verify', { url });
       setResult(response.data);
     } catch (error) {
       console.error('Verification error:', error);
@@ -107,8 +107,8 @@ const App = () => {
         `}
       </style>
       <div className="mt-4 text-xs text-gray-500 text-center max-w-2xl mx-auto px-4">
-  Disclaimer: EchoVeritasAI is an experimental tool that summarizes and analyzes news coverage using AI. While we strive for accuracy and transparency, this tool should not be used as a sole source for decision-making. Always verify with primary sources when possible.
-</div>
+        Disclaimer: EchoVeritasAI is an experimental tool that summarizes and analyzes news coverage using AI. While we strive for accuracy and transparency, this tool should not be used as a sole source for decision-making. Always verify with primary sources when possible.
+      </div>
     </div>
   );
 };
